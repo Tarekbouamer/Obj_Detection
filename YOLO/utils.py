@@ -170,7 +170,7 @@ def write_results(prediction, confidence, num_classes, nms_conf=0.4):
             batch_ind = image_pred_class.new(image_pred_class.size(0), 1).fill_(
                 ind)  # Repeat the batch_id for as many detections of the class cls in the image
             seq = batch_ind, image_pred_class
-
+           # [ batch id; 4 coordinates , objectness, cls conf, cls id ] = [8]
             if not write:
                 output = torch.cat(seq, 1)
                 write = True
