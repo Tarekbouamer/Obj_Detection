@@ -6,6 +6,7 @@ import torch
 
 
 def unique(tensor):
+    # get classes from tensor
     tensor_np = tensor.cpu().numpy()
     unique_np = np.unique(tensor_np)
     unique_tensor = torch.from_numpy(unique_np)
@@ -14,18 +15,14 @@ def unique(tensor):
     tensor_res.copy_(unique_tensor)
     return tensor_res
 
-
 def bbox_iou(box1, box2):
-    """
-    Returns the IoU of two bounding boxes
+    #Returns the IoU of two bounding boxes
 
-
-    """
     # Get the coordinates of bounding boxes
     b1_x1, b1_y1, b1_x2, b1_y2 = box1[:, 0], box1[:, 1], box1[:, 2], box1[:, 3]
     b2_x1, b2_y1, b2_x2, b2_y2 = box2[:, 0], box2[:, 1], box2[:, 2], box2[:, 3]
 
-    # get the corrdinates of the intersection rectangle
+    # get the coordinates of the intersection rectangle
     inter_rect_x1 = torch.max(b1_x1, b2_x1)
     inter_rect_y1 = torch.max(b1_y1, b2_y1)
     inter_rect_x2 = torch.min(b1_x2, b2_x2)
@@ -42,7 +39,6 @@ def bbox_iou(box1, box2):
     iou = inter_area / (b1_area + b2_area - inter_area)
 
     return iou
-
 
 def predict_transform(prediction, inp_dim, anchors, num_classes, CUDA=True):
     batch_size = prediction.size(0)
@@ -185,7 +181,8 @@ def write_results(prediction, confidence, num_classes, nms_conf=0.4):
 
 
 def letterbox_image(img, inp_dim):
-    '''resize image with unchanged aspect ratio using padding'''
+    #resize image with unchanged aspect ratio using padding
+
     img_w, img_h = img.shape[1], img.shape[0]
     w, h = inp_dim
     new_w = int(img_w * min(w / img_w, h / img_h))
@@ -200,14 +197,11 @@ def letterbox_image(img, inp_dim):
 
 
 def prep_image(img, inp_dim):
-    """
-    Prepare image for inputting to the neural network.
+    # Prepare image for inputting to the neural network and Returns a Variable
 
-    Returns a Variable
-    """
     img = (letterbox_image(img, (inp_dim, inp_dim)))
     img = img[:, :, ::-1].transpose((2, 0, 1)).copy()
-    img = torch.from_numpy(img).float().div(255.0).unsqueeze(0)
+    img = torch.from_numpy(img).float().div(255.0).unsqueeze(0)  # numpy-->torch
     return img
 
 
