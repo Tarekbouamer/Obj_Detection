@@ -1,12 +1,10 @@
 from __future__ import division
+
 import os
 
+import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-from torch.autograd import Variable
-import numpy as np
-
 from utils import predict_transform
 
 # read the CfG path
@@ -180,18 +178,19 @@ class Darknet(nn.Module):
                 layers = module["layers"]
                 layers = [int(a) for a in layers]
 
-                head = layers[0]
-                tail = layers[1]      #bug in here check it again case no tail
+                if (layers[0]) > 0:
+                    layers[0] = layers[0] - i
 
+                if len(layers) == 1:
+                    x = outputs[i + (layers[0])]
 
-                if (tail == 0):
-                    x = outputs[i + head]
+                else:
+                    if (layers[1]) > 0:
+                        layers[1] = layers[1] - i
 
-                elif (tail > 0):
-                    tail = i-tail
-                    head_layer = outputs[i + head]
-                    tail_layer = outputs[i + tail]
-                    x = torch.cat((head_layer, tail_layer), 1)
+                    map1 = outputs[i + layers[0]]
+                    map2 = outputs[i + layers[1]]
+                    x = torch.cat((map1, map2), 1)
 
             # 4) Residual Layers Type
             elif module_type == "shortcut":

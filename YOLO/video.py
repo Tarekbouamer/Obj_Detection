@@ -5,9 +5,8 @@ import pickle as pkl
 import random
 import time
 
-from torch.autograd import Variable
-
 from darknet import Darknet
+from torch.autograd import Variable
 from utils import *
 
 
@@ -18,19 +17,38 @@ def arg_parse():
     """
 
     parser = argparse.ArgumentParser(description='YOLO v3 Detection Module')
-    parser.add_argument("--bs", dest="bs", help="Batch size", default=1)
-    parser.add_argument("--confidence", dest="confidence", help="Object Confidence to filter predictions", default=0.5)
-    parser.add_argument("--nms_thresh", dest="nms_thresh", help="NMS Threshhold", default=0.4)
-    parser.add_argument("--cfg", dest='cfgfile', help=
-    "Config file",
-                        default="cfg/yolov3.cfg", type=str)
-    parser.add_argument("--weights", dest='weightsfile', help=
-    "weightsfile",
-                        default="yolov3.weights", type=str)
-    parser.add_argument("--reso", dest='reso', help=
-    "Input resolution of the network. Increase to increase accuracy. Decrease to increase speed",
-                        default="416", type=str)
-    parser.add_argument("--video", dest="videofile", help="Video file to     run detection on", default="video.avi",
+
+    parser.add_argument("--bs",
+                        dest="bs",
+                        help="Batch size",
+                        default=1)
+    parser.add_argument("--confidence",
+                        dest="confidence",
+                        help="Object Confidence to filter predictions",
+                        default=0.5)
+    parser.add_argument("--nms_thresh",
+                        dest="nms_thresh",
+                        help="NMS Threshhold",
+                        default=0.4)
+    parser.add_argument("--cfg",
+                        dest='cfgfile',
+                        help="Config file",
+                        default="cfg/yolov3.cfg",
+                        type=str)
+    parser.add_argument("--weights",
+                        dest='weightsfile',
+                        help="weightsfile",
+                        default="yolov3.weights",
+                        type=str)
+    parser.add_argument("--reso",
+                        dest='reso',
+                        help="Input resolution of the network. Increase to increase accuracy. Decrease to increase speed",
+                        default="416",
+                        type=str)
+    parser.add_argument("--video",
+                        dest="videofile",
+                        help="Video file to run detection on",
+                        default="video.avi",
                         type=str)
 
     return parser.parse_args()
@@ -86,7 +104,7 @@ videofile = args.videofile  # or path to the video file.
 
 cap = cv2.VideoCapture(videofile)
 
-# cap = cv2.VideoCapture(0)  for webcam
+# cap = cv2.VideoCapture(0)  #for webcam
 
 assert cap.isOpened(), 'Cannot capture source'
 

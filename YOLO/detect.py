@@ -11,6 +11,7 @@ import cv2
 import pandas as pd
 import torch
 from darknet import Darknet
+from matplotlib import pyplot as plt
 from torch.autograd import Variable
 from utils import *
 
@@ -194,6 +195,7 @@ colors = pkl.load(open("pallete", "rb"))  # random coloring file
 
 draw = time.time()
 
+cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
 
 def write(x, results):
     # drawing funtion box class
@@ -208,6 +210,8 @@ def write(x, results):
     c2 = c1[0] + t_size[0] + 3, c1[1] + t_size[1] + 4
     cv2.rectangle(img, c1, c2, color, -1)
     cv2.putText(img, label, (c1[0], c1[1] + t_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1, [225, 255, 255], 1);
+    cv2.imshow('frame', img)
+    plt.imshow(img, cmap='gray', interpolation='bicubic')
     return img
 
 
